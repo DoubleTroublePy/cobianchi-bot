@@ -1,6 +1,6 @@
 # cobianchi-bot
 
-retriving the timetablo of the cobianchi site and if changed send a telegram message
+retrieving the timetable of the cobianchi site and if is changed send a telegram message
 
 ## Install
 
