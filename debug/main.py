@@ -50,7 +50,7 @@ class linkFind(Thread):
 
 if __name__ == '__main__':
 
-    path = 'E:/GitHub/timetable-link-notification/link.txt'
+    path = 'GitHub/Progetti/timetable-link-notification/link.txt'
     time_now = time.time() + 86500
     thread1 = linkFind("link", path)
 
@@ -77,6 +77,9 @@ if __name__ == '__main__':
                     first_name = str(update["result"][pos]["message"]["from"]["first_name"])
         
                     print("... message ...")
+                    if '/start' in message:
+                        text = 'comandi a disposizione: \n /orario <classe> se usato puro restituscie l orario generale'
+                        telegram.bot_send_text(text, ID)
 
                     if '/orario'in message: # command /orario <classe>
                         if len(message) == 7: # if the class in not present send the general link
