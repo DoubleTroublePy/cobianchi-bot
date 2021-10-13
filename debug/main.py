@@ -84,7 +84,7 @@ if __name__ == '__main__':
                     if '/orario'in message: # command /orario <classe>
                         if len(message) == 7: # if the class in not present send the general link
                             telegram.bot_send_text('Nuovo orario >>> ' + link, ID)
-                        elif len(message) > 7: 
+                        elif len(message) == 13: 
                             class_val = message[8:] # delete /orario part
                             class_val = class_val.upper() 
                             html_file = lc.reachSchedule(link)
@@ -93,7 +93,9 @@ if __name__ == '__main__':
                             if link_val2: # if the program find the class send it else send error
                                 telegram.bot_send_text("l'orario della " + class_val + " è >>> " + link + '/' + link_val2 + '.html', ID)
                             else:
-                                telegram.bot_send_text("classe incoretta o inesistente", ID)
+                                telegram.bot_send_text("classe incorretta o inesistente", ID)
+                        else:
+                            telegram.bot_send_text("classe incorretta", ID)
             # set the offset to the next value
             telegram.bot_set_offset(str((update["result"][len(update["result"])-1]["update_id"]) + 1))
         time.sleep(.1)
