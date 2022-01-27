@@ -1,15 +1,15 @@
-from os import getenv
-from requests import get
 from urllib.request import urlopen
 from dotenv import load_dotenv
+from requests import get
+from os import getenv
 import json
-import requests
 
+# for HTTP purpose
 import ssl
 ssl._create_default_https_context = ssl._create_unverified_context
 
 class Telegram:
-    def bot_set_offset(offset:str) -> json:
+    def bot_set_offset(offset: str) -> json:
         # retrieve the telegram token
         load_dotenv()
         TELEGRAM_TOKEN = getenv('TELEGRAM_TOKEN')
@@ -20,13 +20,12 @@ class Telegram:
         response = urlopen(send_text)
         return response
 
-    def bot_get_update(self) -> urlopen:
-        # retrive the telegram token
+    def bot_get_update() -> urlopen:
+        # retrieve the telegram token
         load_dotenv()
         TELEGRAM_TOKEN = getenv('TELEGRAM_TOKEN')
 
         send_text = f'https://api.telegram.org/bot{TELEGRAM_TOKEN}/getUpdates'
-
         # post the html link
         response = urlopen(send_text)
         return response

@@ -27,7 +27,7 @@ class LinkFind(Thread):
                     link = string
                 return False
         # assemble a link and reach them
-        print ("... " + self.name + " start ...")
+        print (f"... {self.name} start ...")
         key = 'http://www.cobianchi.it/'
         data = datetime.datetime.now()
         year = data.year
