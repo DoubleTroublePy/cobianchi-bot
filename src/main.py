@@ -44,23 +44,34 @@ class LinkFind(Thread):
             html_link = lc.findKey(re.compile(key1 + key2 + '(.*?)' + key3), html_file)
             link = path_analysis(self.path, '')
             if html_link != link:
+                send_new_link(html_link)
                 with open(self.path, 'w') as f:
                     print('... writing ...')
                     f.write(key + key1 + key2 + html_link)      
                 return html_link
 
 
+def send_new_link(link: str) -> None:
+    with open(id_path, 'r') as f:
+        ids = f.readlines()
+    for blob in ids:
+        blob = blob.replace('\n', '').split(', ')
+        telegram.bot_send_text(blob[1], blob[0])
+
+
 if __name__ == '__main__':
 
-    path = '../link.txt'
+    link_path = '../link.txt'
+    id_path = '../id.cvs'
+
     time_now = time.time() + 86500
-    thread1 = LinkFind("link", path)
+    thread1 = LinkFind("link", link_path)
 
     while True:
         time_old = time.time()
         if time_now - time_old >= 86400:
             thread1.start()
-            with open(path, 'r') as f:
+            with open(link_path, 'r') as f:
                 link = f.read()
             time_now = time.time()
         
@@ -87,11 +98,26 @@ if __name__ == '__main__':
                                '/orario <classe> -> invia link orario   '
 
                         telegram.bot_send_text(help_, ID)
+                    # TODO avoid repetitions in the file and create file if it doesn't exist
+                    if '/add_me' in message:  # command /orario <classe>
+                        with open(id_path, 'r') as f:
+                            ids = f.readlines()
+                        if len(message) == 7:  # if the class in not present send the general link
+                            if ID not in ids[0]:
+                                with open(id_path, 'a') as f:
+                                    f.write(f'{ID}, 0AAAA\n')
+                        elif len(message) > 7:
+                            class_val = message[8:]  # delete /orario part
+                            class_val = class_val.upper()
+                            if not(ID in ids[0] and class_val in ids[0]):
+                                with open(id_path, 'a') as f:
+                                    f.write(f'{ID}, {class_val}\n')
+                    send_new_link("aaa")
 
                     if '/orario' in message:  # command /orario <classe>
                         if len(message) == 7:  # if the class in not present send the general link
                             telegram.bot_send_text('Nuovo orario >>> ' + link, ID)
-                        elif len(message) > 7: 
+                        elif len(message) > 7:
                             class_val = message[8:]  # delete /orario part
                             class_val = class_val.upper() 
                             html_file = lc.reach_schedule(link)
